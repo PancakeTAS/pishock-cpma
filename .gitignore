@@ -1,0 +1,8 @@
+# secrets
+shockenv.sh
+
+# game files
+CPMA
+
+# vscode files
+.vscode
