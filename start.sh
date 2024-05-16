@@ -10,6 +10,7 @@ MIN_INTENSITY=1
 MAX_INTENSITY=20
 DURATION=0.3
 TIMEOUT=15 # in seconds
+USERNAME="Pancake"
 
 # Setup the environment:
 # ```bash
@@ -34,14 +35,15 @@ echo "Launching cnq3-server-x64..."
 cd CPMA
 stdbuf -oL script -c ./cnq3-server-x64 -f /dev/null | while IFS= read -r line
 do
+    echo $line
 
     # Check if the timeout has not been reached
     if [ $(date +%s) -lt $NEXT_SHOCK ]; then
         continue
     fi
 
-    # Check stdout for 'Kill: %d %d %d: %s killed Pancake by ...'
-    if [[ $line =~ Kill:\ [0-9]*\ [0-9]*\ [0-9]*:\ .*\ killed\ Pancake\ by.* ]]; then
+    # Check stdout for 'Kill: %d %d %d: %s killed $USERNAME by %s'
+    if [[ $line =~ Kill:\ [0-9]*\ [0-9]*\ [0-9]*:\ .*\ killed\ $USERNAME\ by\ .* ]]; then
         ./../shockms.sh $(shuf -i $MIN_INTENSITY-$MAX_INTENSITY -n 1) $DURATION
         NEXT_SHOCK=$(($(date +%s) + $TIMEOUT))
     fi
